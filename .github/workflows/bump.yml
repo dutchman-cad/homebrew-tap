@@ -1,0 +1,95 @@
+name: Update releases
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.bump.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - id: bump
+        name: Resolve and verify release assets
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/bump.py
+          if git diff --quiet -- Formula; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: steps.bump.outputs.changed == 'true'
+        with:
+          name: formulas
+          path: Formula/
+          if-no-files-found: error
+
+  test:
+    needs: bump
+    if: needs.bump.outputs.changed == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: formulas
+          path: Formula/
+      - uses: Homebrew/actions/setup-homebrew@master
+      - name: Audit, install and test both formulas
+        run: bash scripts/test.sh
+
+  commit:
+    needs: [bump, test]
+    if: needs.bump.outputs.changed == 'true' && needs.test.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: formulas
+          path: Formula/
+      - name: Commit verified formulas
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for formula in dutchman dutchman-pilot; do
+            path="Formula/$formula.rb"
+            if ! git diff --quiet -- "$path"; then
+              version=$(sed -n 's/^  version "\([^"]*\)".*/\1/p' "$path")
+              test -n "$version"
+              git add "$path"
+              git commit -m "$formula $version"
+            fi
+          done
+          git push
