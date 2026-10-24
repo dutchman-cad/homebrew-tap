@@ -1,5 +1,7 @@
 # Dutchman Homebrew tap
 
+[![Discord](https://img.shields.io/badge/Discord-Dutchman%20CAD-5865F2?logo=discord&logoColor=white)](https://discord.gg/yTcseBEdeu)
+
 Homebrew packages for Dutchman Convert and Pilot on macOS and Linux.
 
 ```sh
@@ -30,3 +32,7 @@ stable release, then follows stable releases. Update installed packages with:
 brew update
 brew upgrade
 ```
+
+## Help
+
+Install problems or questions: the help forums on the [Dutchman CAD Discord](https://discord.gg/yTcseBEdeu), or an issue in this repository.
