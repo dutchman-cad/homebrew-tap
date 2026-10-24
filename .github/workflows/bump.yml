@@ -61,7 +61,7 @@ jobs:
         with:
           name: formulas
           path: Formula/
-      - uses: Homebrew/actions/setup-homebrew@master
+      - uses: Homebrew/actions/setup-homebrew@main
       - name: Audit, install and test both formulas
         run: bash scripts/test.sh
 

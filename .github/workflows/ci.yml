@@ -27,6 +27,6 @@ jobs:
           persist-credentials: false
       - name: Test release updater
         run: python3 -m unittest discover -s tests -v
-      - uses: Homebrew/actions/setup-homebrew@master
+      - uses: Homebrew/actions/setup-homebrew@main
       - name: Audit, install and test both formulas
         run: bash scripts/test.sh
