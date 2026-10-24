@@ -86,7 +86,7 @@ jobs:
           for formula in dutchman dutchman-pilot; do
             path="Formula/$formula.rb"
             if ! git diff --quiet -- "$path"; then
-              version=$(sed -n 's/^  version "\([^"]*\)".*/\1/p' "$path")
+              version=$(sed -n 's#.*/releases/download/v\([^/"]*\)/.*#\1#p' "$path" | head -n 1)
               test -n "$version"
               git add "$path"
               git commit -m "$formula $version"
