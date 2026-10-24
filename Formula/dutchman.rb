@@ -1,7 +1,6 @@
 class Dutchman < Formula
   desc "Converts native CAD designs into SolidCraft designs"
   homepage "https://github.com/dutchman-cad/dutchman"
-  version "0.1.5"
   license "Apache-2.0"
 
   livecheck do

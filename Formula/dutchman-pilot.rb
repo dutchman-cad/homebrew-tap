@@ -1,13 +1,12 @@
 class DutchmanPilot < Formula
   desc "Drives SolidCraft from plain-language requests"
   homepage "https://github.com/dutchman-cad/pilot"
-  version "0.1.0-beta.1"
   license "Apache-2.0"
 
   livecheck do
-    url "https://api.github.com/repos/dutchman-cad/pilot/releases?per_page=100"
+    url :stable
     regex(/^v?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$/i)
-    strategy :json do |json, regex|
+    strategy :github_releases do |json, regex|
       releases = json.reject { |release| release["draft"] || release["tag_name"] == "nightly" }
       stable = releases.reject { |release| release["prerelease"] }
       releases = stable unless stable.empty?
@@ -39,6 +38,13 @@ class DutchmanPilot < Formula
   def install
     bin.install "dutchman-pilot", "dutchman-pilot-eval"
     prefix.install "LICENSE", "NOTICE"
+  end
+
+  def caveats
+    <<~EOS
+      On macOS, Pilot is built for Apple silicon only.
+      `brew install dutchman-cad/tap/dutchman` adds the `dutchman` command, with `dutchman pilot`.
+    EOS
   end
 
   test do

@@ -127,8 +127,7 @@ def update(name, repo, targets):
         raise ValueError(f"{repo} {tag}: missing expected assets: {', '.join(missing)}")
     path = ROOT / "Formula" / f"{name}.rb"
     original = path.read_text()
-    updated = replace_once(r'^(  version ")[^"]+(".*)$',
-                           lambda m: m[1] + version + m[2], original, name)
+    updated = original
     for target, filename in zip(targets, expected):
         asset = assets[filename]
         print(f"Verifying {filename}", flush=True)
@@ -157,7 +156,8 @@ def main():
         if original == updated:
             print(f"{path.stem} {version}: up to date")
         else:
-            old = re.search(r'^  version "([^"]+)"', original, re.MULTILINE)[1]
+            # Formulas carry no version line: Homebrew reads it from the URLs.
+            old = re.search(r'/releases/download/v?([^/"]+)/', original)[1]
             print(f"{path.stem}: {old} -> {version} (version, URLs and/or SHA256s changed)"
                   + (" [check only]" if args.check else ""))
             if not args.check:

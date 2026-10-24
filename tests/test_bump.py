@@ -95,8 +95,8 @@ class BumpTests(unittest.TestCase):
     def test_check_and_no_partial_updates(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "formula.rb"
-            original = '  version "0.1.0"\n'
-            updated = '  version "0.2.0"\n'
+            original = '  url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0/pilot-0.1.0-x86_64-linux.tar.gz"\n'
+            updated = '  url "https://github.com/dutchman-cad/pilot/releases/download/v0.2.0/pilot-0.2.0-x86_64-linux.tar.gz"\n'
             path.write_text(original)
             plan = (path, original, updated, "0.2.0")
             with patch.object(bump, "update", return_value=plan), patch("sys.argv", ["bump.py", "--check"]), contextlib.redirect_stdout(io.StringIO()):
