@@ -10,25 +10,25 @@ class Dutchman < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.1.5/dutchman-0.1.5-aarch64-apple-darwin.tar.gz"
-      sha256 "95abaae1ed811c6ce670cbcabdb05199bbd708061516eb0547974ccc8f2a9b6b"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.0/dutchman-0.2.0-aarch64-apple-darwin.tar.gz"
+      sha256 "d6dc7e35ddc962ab9d6fccb8ca01b12a8623ba8ba84fdd3791b4c063f9beb6f2"
     end
 
     on_intel do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.1.5/dutchman-0.1.5-x86_64-apple-darwin.tar.gz"
-      sha256 "41b8a9898af93ad287a58b27bd0a8c506c752856b5c453230712eec99ee8b07f"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.0/dutchman-0.2.0-x86_64-apple-darwin.tar.gz"
+      sha256 "9f9a8a2176d80a5813520f109407294bd5aadfd55bff559996d4b871532750ae"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.1.5/dutchman-0.1.5-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "164c6c2bef76de8db12c3c687f86ea1ae6f9449d0610d18378b50736b9845111"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.0/dutchman-0.2.0-aarch64-unknown-linux-gnu.tar.gz"
+      sha256 "1439797ae498736ded156b8cb611b7bedaf9254d8a5de51c67bcfe5fa578b143"
     end
 
     on_intel do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.1.5/dutchman-0.1.5-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "42c04ae05b608d1ebd103cde05e0627fda84a4bcfafc87b9ae38230628dd4b6c"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.0/dutchman-0.2.0-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "5d90ef2880927e9cdb5ab39af4c5c18d76fdaf5ab33406069074df60710acf95"
     end
   end
 
