@@ -30,7 +30,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           python3 scripts/bump.py
-          if git diff --quiet -- Formula; then
+          # A new release drops the old bottles, and a formula without bottles gets new ones.
+          if git diff --quiet -- Formula && [[ -z "$(python3 scripts/bottle.py needed)" ]]; then
             echo 'changed=false' >> "$GITHUB_OUTPUT"
           else
             echo 'changed=true' >> "$GITHUB_OUTPUT"
@@ -42,13 +43,13 @@ jobs:
           path: Formula/
           if-no-files-found: error
 
-  test:
+  bottle:
     needs: bump
     if: needs.bump.outputs.changed == 'true'
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, macos-15-intel, ubuntu-latest, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     env:
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -62,12 +63,80 @@ jobs:
           name: formulas
           path: Formula/
       - uses: Homebrew/actions/setup-homebrew@main
-      - name: Audit, install and test both formulas
+      - name: Audit, bottle, install and test both formulas
+        run: bash scripts/test.sh --keep-bottles bottles
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bottles-${{ matrix.os }}
+          path: bottles/
+          if-no-files-found: ignore
+          compression-level: 0
+
+  publish:
+    needs: bottle
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: formulas
+          path: Formula/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: bottles-*
+          path: bottles/
+      - name: Write bottle blocks and publish the bottles
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python3 scripts/bottle.py write bottles assets > written.txt
+          cat written.txt
+          while read -r name version; do
+            tag="$name-$version"
+            files=(assets/"$tag"/*)
+            if gh release view "$tag" >/dev/null 2>&1; then
+              gh release upload "$tag" "${files[@]}" --clobber
+            else
+              gh release create "$tag" "${files[@]}" --target "$GITHUB_SHA" --latest=false \
+                --title "$name $version bottles" \
+                --notes "Homebrew bottles for $name $version, poured by \`brew install dutchman-cad/tap/$name\`."
+            fi
+          done < written.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bottled-formulas
+          path: Formula/
+          if-no-files-found: error
+
+  verify:
+    needs: publish
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, macos-15-intel, ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: bottled-formulas
+          path: Formula/
+      - uses: Homebrew/actions/setup-homebrew@main
+      - name: Audit, pour and test both formulas
         run: bash scripts/test.sh
 
   commit:
-    needs: [bump, test]
-    if: needs.bump.outputs.changed == 'true' && needs.test.result == 'success'
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -77,7 +146,7 @@ jobs:
           ref: ${{ github.ref_name }}
       - uses: actions/download-artifact@v4
         with:
-          name: formulas
+          name: bottled-formulas
           path: Formula/
       - name: Commit verified formulas
         run: |
@@ -88,8 +157,13 @@ jobs:
             if ! git diff --quiet -- "$path"; then
               version=$(sed -n 's#.*/releases/download/v\([^/"]*\)/.*#\1#p' "$path" | head -n 1)
               test -n "$version"
+              message="$formula $version"
+              # A change that keeps the release only adds bottles.
+              if ! git diff -U0 -- "$path" | grep -q '^[-+] *url '; then
+                message="$message bottles"
+              fi
               git add "$path"
-              git commit -m "$formula $version"
+              git commit -m "$message"
             fi
           done
           git push

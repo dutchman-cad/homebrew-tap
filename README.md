@@ -21,12 +21,14 @@ Run it as `dutchman-pilot`; the package also includes `dutchman-pilot-eval`.
 Pilot supports Apple Silicon macOS and ARM64/x86-64 Linux. Convert also
 supports Intel macOS.
 
-On macOS, a Homebrew install needs no first-run Gatekeeper step: Homebrew
+Homebrew pours a ready-made bottle, so an install needs no Xcode or Command
+Line Tools. On macOS it also needs no first-run Gatekeeper step: Homebrew
 downloads do not carry the quarantine flag.
 
-The formulas follow releases automatically within about an hour, after checks
-pass. Convert follows stable releases. Pilot follows prereleases until its first
-stable release, then follows stable releases. Update installed packages with:
+The formulas and their bottles follow releases automatically within about an
+hour, after checks pass on macOS and Linux. Convert follows stable releases.
+Pilot follows prereleases until its first stable release, then follows stable
+releases. Update installed packages with:
 
 ```sh
 brew update

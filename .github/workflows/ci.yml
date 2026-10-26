@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, macos-15-intel, ubuntu-latest, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     env:
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -28,5 +28,5 @@ jobs:
       - name: Test release updater
         run: python3 -m unittest discover -s tests -v
       - uses: Homebrew/actions/setup-homebrew@main
-      - name: Audit, install and test both formulas
+      - name: Audit, bottle, install and test both formulas
         run: bash scripts/test.sh
