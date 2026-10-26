@@ -37,11 +37,11 @@ sys.exit(0 if installed and installed[0]["poured_from_bottle"] else 1)'
 
 for formula in dutchman dutchman-pilot; do
   full="dutchman-cad/tap/$formula"
-  brew audit --strict --online --formula "$full"
   if [[ "$formula" == dutchman-pilot && "$(uname -s)" == Darwin && "$(uname -m)" == x86_64 ]]; then
-    echo 'Skipping Pilot install/test: Intel macOS is unsupported.'
+    echo 'Skipping Pilot: Intel macOS is unsupported.'
     continue
   fi
+  brew audit --strict --online --formula "$full"
   if brew list --formula "$full" >/dev/null 2>&1; then
     brew uninstall --formula "$full"
   fi
