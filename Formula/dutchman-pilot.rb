@@ -14,6 +14,14 @@ class DutchmanPilot < Formula
     end
   end
 
+  bottle do
+    root_url "https://github.com/dutchman-cad/homebrew-tap/releases/download/dutchman-pilot-0.1.0-beta.5"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f825ee8a6829bd869e5c9849ad2328e8ecbcf428e11772c5ef815a83e7abe8e0"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "f825ee8a6829bd869e5c9849ad2328e8ecbcf428e11772c5ef815a83e7abe8e0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b31cdfd8ce923b17548105e52fd4e1b9ef452bd9762db391dbb4d6005434ae11"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "860f60733189d65ee936cfcb66ebd7a8db67cdd080f188a7cfb0b65819da985a"
+  end
+
   on_macos do
     depends_on arch: :arm64
 
