@@ -117,6 +117,26 @@ class BumpTests(unittest.TestCase):
             self.assertNotIn("bottle do", updated)
             self.assertIn("  end\n\n  on_macos do", updated)
 
+    def test_cask_follows_the_release_dmg(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "Casks").mkdir()
+            name = "dutchman-convert"
+            original = (bump.ROOT / "Casks" / f"{name}.rb").read_text()
+            (root / "Casks" / f"{name}.rb").write_text(original)
+            repo, asset = bump.CASKS[name]
+            dmg = dict(name="dutchman-9.8.7-macos-universal.dmg",
+                       browser_download_url="https://example.org/dmg")
+            with patch.object(bump, "ROOT", root), patch.object(bump, "resolve", return_value=release("v9.8.7", False, assets=[dmg])), patch.object(bump, "checksum", return_value="c" * 64), contextlib.redirect_stdout(io.StringIO()):
+                _, _, updated, version = bump.update_cask(name, repo, asset)
+            self.assertEqual(version, "9.8.7")
+            self.assertIn('  version "9.8.7"\n  sha256 "' + "c" * 64 + '"\n', updated)
+            # The URL and the rest of the cask are unchanged.
+            self.assertEqual(updated.splitlines()[3:], original.splitlines()[3:])
+            with patch.object(bump, "ROOT", root), patch.object(bump, "resolve", return_value=release("v9.8.7", False, assets=[])):
+                with self.assertRaisesRegex(ValueError, "missing expected asset: dutchman-9.8.7-macos-universal.dmg"):
+                    bump.update_cask(name, repo, asset)
+
     def test_check_and_no_partial_updates(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "formula.rb"

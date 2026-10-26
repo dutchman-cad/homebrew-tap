@@ -27,6 +27,10 @@ cp Formula/*.rb "$work/candidates/"
 # Local bottle blocks are written into the tap; put the candidate formulas back on exit.
 trap 'cp "$work/candidates/"*.rb "$tap_dir/Formula/"; rm -rf "$work"' EXIT
 cp "$work/candidates/"*.rb "$tap_dir/Formula/"
+mkdir -p "$tap_dir/Casks"
+if [[ ! "$tap_dir/Casks" -ef Casks ]]; then
+  cp Casks/*.rb "$tap_dir/Casks/"
+fi
 
 poured() {
   brew info --json=v2 "$1" | python3 -c '
@@ -60,6 +64,19 @@ for formula in dutchman dutchman-pilot; do
   fi
   brew test "$full"
 done
+
+# The app installs on macOS only, into a folder of its own rather than /Applications.
+if [[ "$(uname -s)" == Darwin ]]; then
+  for cask in dutchman-convert; do
+    brew audit --strict --online --cask "dutchman-cad/tap/$cask"
+    if brew list --cask "dutchman-cad/tap/$cask" >/dev/null 2>&1; then
+      brew uninstall --cask "dutchman-cad/tap/$cask"
+    fi
+    brew install --cask --appdir="$work/apps" "dutchman-cad/tap/$cask"
+    test -x "$work/apps/Dutchman Convert.app/Contents/MacOS/Dutchman"
+    brew uninstall --cask "dutchman-cad/tap/$cask"
+  done
+fi
 
 if [[ -n "$keep" ]]; then
   shopt -s nullglob

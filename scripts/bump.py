@@ -24,6 +24,10 @@ TARGETS = {
         "pilot", ("aarch64-macos", "aarch64-linux", "x86_64-linux"),
     ),
 }
+# Casks: the release asset each installs, by the release's version.
+CASKS = {
+    "dutchman-convert": ("dutchman", "dutchman-{version}-macos-universal.dmg"),
+}
 BOTTLE = re.compile(r"^  bottle do\n.*?^  end\n\n?", re.MULTILINE | re.DOTALL)
 SEMVER = re.compile(
     r"v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
@@ -150,18 +154,41 @@ def update(name, repo, targets):
     return path, original, updated, version
 
 
+def update_cask(name, repo, asset_name):
+    release = resolve(repo)
+    version = release["tag_name"].removeprefix("v")
+    version_key(release)
+    assets = {a["name"]: a for a in release["assets"]}
+    filename = asset_name.format(version=version)
+    if filename not in assets:
+        raise ValueError(f"{repo} {release['tag_name']}: missing expected asset: {filename}")
+    path = ROOT / "Casks" / f"{name}.rb"
+    original = path.read_text()
+    print(f"Verifying {filename}", flush=True)
+    sha = checksum(assets[filename], assets.get(filename + ".sha256"))
+    # The URL is built from the version, so the version and SHA256 are all that change.
+    updated = replace_once(r'^(  version ")[^"]+(")$', lambda m: m[1] + version + m[2],
+                           original, f"{name}/version")
+    updated = replace_once(r'^(  sha256 ")[0-9a-f]{64}(")$', lambda m: m[1] + sha + m[2],
+                           updated, f"{name}/sha256")
+    return path, original, updated, version
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Report changes without writing files")
     args = parser.parse_args()
     # Validate both products before writing either formula.
     updates = [update(name, repo, targets) for name, (repo, targets) in TARGETS.items()]
+    updates += [update_cask(name, repo, asset) for name, (repo, asset) in CASKS.items()]
     for path, original, updated, version in updates:
         if original == updated:
             print(f"{path.stem} {version}: up to date")
         else:
             # Formulas carry no version line: Homebrew reads it from the URLs.
-            old = re.search(r'/releases/download/v?([^/"]+)/', original)[1]
+            old = re.search(r'^  version "([^"]+)"$|/releases/download/v?([^/"]+)/',
+                            original, re.MULTILINE)
+            old = old[1] or old[2]
             print(f"{path.stem}: {old} -> {version} (version, URLs and/or SHA256s changed)"
                   + (" [check only]" if args.check else ""))
             if not args.check:
