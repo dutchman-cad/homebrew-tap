@@ -24,6 +24,7 @@ TARGETS = {
         "pilot", ("aarch64-macos", "aarch64-linux", "x86_64-linux"),
     ),
 }
+BOTTLE = re.compile(r"^  bottle do\n.*?^  end\n\n?", re.MULTILINE | re.DOTALL)
 SEMVER = re.compile(
     r"v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
     r"(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?"
@@ -143,6 +144,9 @@ def update(name, repo, targets):
                                updated, f"{name}/{target}")
     updated = updated.replace(
         "  # Bootstrap values: run scripts/bump.py with GitHub access before publishing.\n", "")
+    if updated != original:
+        # Bottles hold the old archives: drop them so the workflow bottles the new ones.
+        updated = BOTTLE.sub("", updated)
     return path, original, updated, version
 
 

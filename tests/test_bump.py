@@ -92,6 +92,31 @@ class BumpTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "exactly one"):
                     bump.update(name, repo, targets)
 
+    def test_new_release_drops_bottles(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "Formula").mkdir()
+            name = "dutchman-pilot"
+            path = root / "Formula" / f"{name}.rb"
+            original = (bump.ROOT / "Formula" / f"{name}.rb").read_text()
+            bottles = ('  bottle do\n    root_url "https://example.org"\n'
+                       '    sha256 cellar: :any_skip_relocation, arm64_linux: "' + "b" * 64 + '"\n  end\n\n')
+            bottled = original.replace("  on_macos do", bottles + "  on_macos do", 1)
+            path.write_text(bottled)
+            repo, targets = bump.TARGETS[name]
+            current = bump.BOTTLE.sub("", bottled).split("/releases/download/v", 1)[1].split("/", 1)[0]
+            def selected(version):
+                assets = [dict(name=f"pilot-{version}-{t}.tar.gz",
+                               browser_download_url=f"https://github.com/dutchman-cad/pilot/releases/download/v{version}/pilot-{version}-{t}.tar.gz") for t in targets]
+                return release(f"v{version}", assets=assets)
+            shas = [line.split('"')[1] for line in original.splitlines() if line.strip().startswith('sha256 "')]
+            with patch.object(bump, "ROOT", root), patch.object(bump, "resolve", return_value=selected(current)), patch.object(bump, "checksum", side_effect=shas), contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(bump.update(name, repo, targets)[2], bottled)  # Unchanged keeps bottles.
+            with patch.object(bump, "ROOT", root), patch.object(bump, "resolve", return_value=selected("9.9.9")), patch.object(bump, "checksum", return_value="a" * 64), contextlib.redirect_stdout(io.StringIO()):
+                updated = bump.update(name, repo, targets)[2]
+            self.assertNotIn("bottle do", updated)
+            self.assertIn("  end\n\n  on_macos do", updated)
+
     def test_check_and_no_partial_updates(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "formula.rb"
