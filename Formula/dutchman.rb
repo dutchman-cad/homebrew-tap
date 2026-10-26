@@ -8,6 +8,16 @@ class Dutchman < Formula
     strategy :github_latest
   end
 
+  bottle do
+    root_url "https://github.com/dutchman-cad/homebrew-tap/releases/download/dutchman-0.2.1"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "516ae2037c8d53fc3b4c740e82eaafa5614d4dc3995320c43e42c8a1303c42d1"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "516ae2037c8d53fc3b4c740e82eaafa5614d4dc3995320c43e42c8a1303c42d1"
+    sha256 cellar: :any_skip_relocation, sonoma:        "84a56d13c53c99d307b93e802b8245f76f2e90455f55e8cd79a6bdce5a5d2373"
+    sha256 cellar: :any_skip_relocation, big_sur:       "84a56d13c53c99d307b93e802b8245f76f2e90455f55e8cd79a6bdce5a5d2373"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5ed60eed4bc2e3f044aaf11ef04a1b5435a595e146072920d0095208515a6284"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bdad64d505e0e84514c334a69fdaf95bbb7b151014bc3f96852d2e46b7069362"
+  end
+
   on_macos do
     on_arm do
       url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.1/dutchman-0.2.1-aarch64-apple-darwin.tar.gz"
