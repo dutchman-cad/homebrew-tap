@@ -35,8 +35,9 @@ class BottleTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         (self.root / "Formula").mkdir()
         for name in bottle.PLATFORMS:
+            # Start from the formulas without bottles.
             (self.root / "Formula" / f"{name}.rb").write_text(
-                (bottle.ROOT / "Formula" / f"{name}.rb").read_text())
+                bottle.BLOCK.sub("", (bottle.ROOT / "Formula" / f"{name}.rb").read_text()))
         self.built = self.root / "built"
         self.built.mkdir()
         self.assets = self.root / "assets"

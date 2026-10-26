@@ -47,6 +47,15 @@ class Dutchman < Formula
     prefix.install "LICENSE", "NOTICE", "README.md", "licences"
   end
 
+  def caveats
+    on_macos do
+      <<~EOS
+        This adds the commands. For the Dutchman Convert app in Applications and Launchpad:
+          brew install --cask dutchman-cad/tap/dutchman-convert
+      EOS
+    end
+  end
+
   test do
     assert_match version.to_s, shell_output("#{bin}/dutchman --version")
   end
