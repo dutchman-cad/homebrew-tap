@@ -18,20 +18,20 @@ class DutchmanPilot < Formula
     depends_on arch: :arm64
 
     on_arm do
-      url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0-beta.4/pilot-0.1.0-beta.4-aarch64-macos.tar.gz"
-      sha256 "fed21151c314f417d00d45e1c44e4809694c1033f26ebb3885f811fedc131140"
+      url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0-beta.5/pilot-0.1.0-beta.5-aarch64-macos.tar.gz"
+      sha256 "5d6e6dbebf6e21116b792c8f7f3901807fbc0dc225fc3afea75816373609b0d0"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0-beta.4/pilot-0.1.0-beta.4-aarch64-linux.tar.gz"
-      sha256 "a1164b8690d8f377ed232d57331913b703ec78072616d2b76ba58349719a0688"
+      url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0-beta.5/pilot-0.1.0-beta.5-aarch64-linux.tar.gz"
+      sha256 "82824dddb7080732b33898f500cf39d41e1ba103e28d67cca6b85beea03d7a7b"
     end
 
     on_intel do
-      url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0-beta.4/pilot-0.1.0-beta.4-x86_64-linux.tar.gz"
-      sha256 "d9d824a44a53b4e0ba20e2a6ffd5d8e78104e9f46b2dc38df04f26903cfa00cc"
+      url "https://github.com/dutchman-cad/pilot/releases/download/v0.1.0-beta.5/pilot-0.1.0-beta.5-x86_64-linux.tar.gz"
+      sha256 "c1d87c26046fb9b2c5fa87688364bb0cb20adc1c8bf3a8370b4efbf277b40d3e"
     end
   end
 
