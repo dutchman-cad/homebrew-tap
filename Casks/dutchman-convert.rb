@@ -1,6 +1,6 @@
 cask "dutchman-convert" do
-  version "0.2.3"
-  sha256 "e757fe37fc39447ba4cdc249fe7f38649b26f59437a8d7979f5b84c09aa5c5d3"
+  version "0.2.4"
+  sha256 "c9b0f5ce34026b3c74cdf2f72165ae1b8722ae701291114c8d4fb4d27b0e0034"
 
   url "https://github.com/dutchman-cad/dutchman/releases/download/v#{version}/dutchman-#{version}-macos-universal.dmg"
   name "Dutchman Convert"
