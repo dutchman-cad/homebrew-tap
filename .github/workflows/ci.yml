@@ -27,6 +27,9 @@ jobs:
         with:
           persist-credentials: false
       - name: Test release updater
+        # Authenticated API calls: shared runner addresses hit the anonymous rate limit.
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python3 -m unittest discover -s tests -v
       - uses: Homebrew/actions/setup-homebrew@main
       - name: Audit, bottle, install and test both formulas
