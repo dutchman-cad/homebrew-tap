@@ -9,36 +9,36 @@ class Dutchman < Formula
   end
 
   bottle do
-    root_url "https://github.com/dutchman-cad/homebrew-tap/releases/download/dutchman-0.2.6"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e7fe37f05c6ff12c005e84935e00dcff7f97c0931c8a50697874f7787e5c7401"
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "e7fe37f05c6ff12c005e84935e00dcff7f97c0931c8a50697874f7787e5c7401"
-    sha256 cellar: :any_skip_relocation, sonoma:        "9ce379a30f9566e742e03ed928d93cf7d0f8c1a039ea556382d7159c5d99a2da"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9ce379a30f9566e742e03ed928d93cf7d0f8c1a039ea556382d7159c5d99a2da"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "637d7c59574ed87cbdcc15985074ab9e9858312d614bd9d4fff4782f43ddce4c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "de3ef02f5c9e9b6c9183f9ed1ef250515e96147f129f4f1f195a825ef79f0652"
+    root_url "https://github.com/dutchman-cad/homebrew-tap/releases/download/dutchman-0.2.7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "db1e6eaef8fbd21f63c306a08151e1f16de8edd0a228af6a0dd311a7d147fc06"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "db1e6eaef8fbd21f63c306a08151e1f16de8edd0a228af6a0dd311a7d147fc06"
+    sha256 cellar: :any_skip_relocation, sonoma:        "561cd22616ba6c22d70f0fef67505172cba2e5bef6630d26c6aa84a6ef3860fb"
+    sha256 cellar: :any_skip_relocation, big_sur:       "561cd22616ba6c22d70f0fef67505172cba2e5bef6630d26c6aa84a6ef3860fb"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c9de84fb781d8ce94d10e1b4da9c3ccc1678619702e88958487d047b21f3a75a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a61bc13f09dac3c632939e81da039e108bb90cc9e0f8e93199a7f8f545ddbdda"
   end
 
   on_macos do
     on_arm do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.6/dutchman-0.2.6-aarch64-apple-darwin.tar.gz"
-      sha256 "e9518b95a4157295f5408eba4897dd720c3b83d12efd6196b8efa0d16871e4a1"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.7/dutchman-0.2.7-aarch64-apple-darwin.tar.gz"
+      sha256 "17658dd7fc6b34823f0bad603c6e7959748a5844f3756b85ab585a1b17f11556"
     end
 
     on_intel do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.6/dutchman-0.2.6-x86_64-apple-darwin.tar.gz"
-      sha256 "4782fe5b815df872614ad14e198392933c5548c45de3db804aca019ed93f60e6"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.7/dutchman-0.2.7-x86_64-apple-darwin.tar.gz"
+      sha256 "940eabc2e94bbf34426f72879e09368787722f680b83e01d5ec3dc04e40ad8a1"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.6/dutchman-0.2.6-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "6d32fb7d47274e00fbba717ede1f5f313df75028b61f4ae99d3e35d7ad4d6523"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.7/dutchman-0.2.7-aarch64-unknown-linux-gnu.tar.gz"
+      sha256 "d2b7b002fdf54f7319aac975bdf3051f0389aabace33e009c4c1aeb9a7623b58"
     end
 
     on_intel do
-      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.6/dutchman-0.2.6-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "552f342eea75c2bf240f8fa109784ab52e699fd298b8120ad0f6d9126c142a8a"
+      url "https://github.com/dutchman-cad/dutchman/releases/download/v0.2.7/dutchman-0.2.7-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "cd199ffdf266945e3064b45fe11ef538a805871306436c81a39c93dc0430050a"
     end
   end
 
