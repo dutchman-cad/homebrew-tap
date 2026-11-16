@@ -10,12 +10,12 @@ class Dutchman < Formula
 
   bottle do
     root_url "https://github.com/dutchman-cad/homebrew-tap/releases/download/dutchman-0.2.10"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "18946dd647e4a43d7226eb26025e21550239dadc7e75060f547a8c954f1f4415"
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "18946dd647e4a43d7226eb26025e21550239dadc7e75060f547a8c954f1f4415"
-    sha256 cellar: :any_skip_relocation, sonoma:        "7ee343d78b448441776397bc3a8a7229fea16424f66b89d0a525c82fb94ddb1b"
-    sha256 cellar: :any_skip_relocation, big_sur:       "7ee343d78b448441776397bc3a8a7229fea16424f66b89d0a525c82fb94ddb1b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b5ce603c7a90219427a517322348f32b8cc320f6d1a916abf462f898587eb6cd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "203dd056fea353668cf238633019912b9cc6c24b0552f4af9fe5b79d025ab21d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "67c8b4f41da32b18ea0384bbfffdb03bd46403659dac5f87b3b1615a2ec44af1"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "67c8b4f41da32b18ea0384bbfffdb03bd46403659dac5f87b3b1615a2ec44af1"
+    sha256 cellar: :any_skip_relocation, sonoma:        "9d12afd76780b2cfd8f49e75cb9446fa827515acaeab175b5a5a0ec97b5d3ec8"
+    sha256 cellar: :any_skip_relocation, big_sur:       "9d12afd76780b2cfd8f49e75cb9446fa827515acaeab175b5a5a0ec97b5d3ec8"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ef899d46180b53711f60f295d1773b3742e09ddb9baae5a4ba52ba3fcfeec0ff"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1ce6490913a93ab5adf0471e9c397fd7ff25de0b7df7f791a9542a5bb34027d6"
   end
 
   on_macos do
